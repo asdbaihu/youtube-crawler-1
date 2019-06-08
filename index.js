@@ -11,7 +11,7 @@ EventEmitter.defaultMaxListeners = 20;
 var events       = new EventEmitter();
 
 // GLOBALS
-var SERVER_PORT  = 80;
+var SERVER_PORT  = 8880;
 var SCRIPT_PORT  = 8888;
 var CLIENT_PORT  = 9999;
 var files        = {}
