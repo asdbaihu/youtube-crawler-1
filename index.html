@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Download Media From Youtube</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        *{
+            font-size: 18px;
+            font-family: monospace, 'Courier New', Courier;
+        }
+        label{
+            font-weight: bold;
+        }
+        #download-button:link, #download-button:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid green;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            visibility: hidden;
+        }
+
+        #download-button:hover, #download-button:active {
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-link" style="margin: 15px;">
+        <label class="enabled" for="link">Video Link:</label>    
+        <input id="link" value=""/> <br>
+        <label class="enabled" for="format">Format:</label>
+        <select name="format" id="format">
+            <option value="Video">Video (MP4 Format)</option>
+            <option value="Audio">Audio (MP3 Format)</option>
+        </select>
+        <button id="submit-button" onclick="sendLink()">Download</button> <br>
+        <a id="download-button" href="" onbl onclick="reset()" download hidden>Get Your Last Downloaded File</a>
+        <br>
+    </div> 
+    <div class="script-output" style="margin: 15px;">
+        <textarea name="script-output" id="output-area" cols="30" rows="10" readonly>Waiting for a media link...</textarea>
+    </div>
+    <script src="http://localhost:9999/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://localhost:9999');
+        var output_area = document.getElementById('output-area');
+        var files = [];
+
+        window.onunload = function () {
+            socket.emit("delete-files", files);
+        };
+
+        socket.on("disconnect", function(){
+            socket.emit("delete-files", files);
+        })
+
+        socket.on('output', function(data) {
+            output_area.innerHTML = output_area.innerHTML + "\n" + data;
+            output_area.scrollTop = output_area.scrollHeight;
+            $("#download-button").attr("href", "");
+            document.getElementById('download-button').style.visibility='hidden'; 
+        });
+
+        socket.on('file-info', function(data) {
+            $.ajax({
+                url:'./downloads/' + data,
+                type:'HEAD',
+                error: function()
+                {
+                    output_area.innerHTML = output_area.innerHTML + "\n" + "File couldn't be found!";
+                    output_area.innerHTML = output_area.innerHTML + "\n" + "#".repeat(30);
+                    output_area.innerHTML = output_area.innerHTML + "\n";
+                    output_area.scrollTop = output_area.scrollHeight;
+                },
+                success: function()
+                {
+                    output_area.innerHTML = output_area.innerHTML + "\n" + "File is ready to be downloaded. Please click Get Your Last Downloaded File button.";
+                    output_area.innerHTML = output_area.innerHTML + "\n" + "#".repeat(30);
+                    output_area.innerHTML = output_area.innerHTML + "\n";
+                    output_area.scrollTop = output_area.scrollHeight;
+                    files.push(data);
+                    $("#download-button").attr("href", './downloads/' + data)
+                    document.getElementById('download-button').style.visibility='visible'; 
+                }
+            });
+        });
+
+        function reset()
+        {
+            output_area.innerHTML = output_area.innerHTML + "\n" + "Download has been started!";
+            output_area.innerHTML = output_area.innerHTML + "\n" + "File will be permanently deleted after you close the website.";
+            output_area.innerHTML = output_area.innerHTML + "\n" + "#".repeat(30);
+            output_area.innerHTML = output_area.innerHTML + "\n";
+            output_area.scrollTop = output_area.scrollHeight;
+            document.getElementById('download-button').style.visibility='hidden'; 
+        }
+
+        function sendLink()
+        {
+            var link   = document.getElementById("link").value;
+            var format = $("#format").val();
+            var data   = {'format': format, 'link': link};
+            socket.emit('link', data);
+        }
+    </script>
+</body>

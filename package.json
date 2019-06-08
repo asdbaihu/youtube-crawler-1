@@ -1,0 +1,32 @@
+{
+  "name": "youtube-crawler",
+  "version": "1.0.0",
+  "description": "Website for downloading videos and audios from youtube",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merterdemir/youtube-crawler.git"
+  },
+  "keywords": [
+    "youtube",
+    "crawl",
+    "video",
+    "audio"
+  ],
+  "author": "Mert Erdemir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/merterdemir/youtube-crawler/issues"
+  },
+  "homepage": "https://github.com/merterdemir/youtube-crawler#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "events": "^3.0.0",
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "socketio": "^1.0.0"
+  }
+}
