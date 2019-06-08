@@ -24,7 +24,7 @@ ydl_audio_opts = {
 }
 
 sio = socketio.Client()
-sio.connect('http://localhost:8888')
+sio.connect('http://localhost:9998')
 
 def send_link_info(data):
     sio.emit('output', '#'*30)
