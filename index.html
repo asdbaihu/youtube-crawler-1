@@ -49,9 +49,9 @@
     <div class="script-output" style="margin: 15px;">
         <textarea name="script-output" id="output-area" cols="30" rows="10" readonly>Waiting for a media link...</textarea>
     </div>
-    <script src="http://localhost:9999/socket.io/socket.io.js"></script>
+    <script src="http://katmer.duckdns.org:9999/socket.io/socket.io.js"></script>
     <script>
-        var socket = io.connect('http://localhost:9999');
+        var socket = io.connect('http://katmer.duckdns.org:9999');
         var output_area = document.getElementById('output-area');
         var files = [];
 
