@@ -36,7 +36,7 @@ def download_as_video(link):
     with youtube_dl.YoutubeDL(ydl_video_opts) as ydl:
         try:
             info_dict = ydl.extract_info(link, download=False)
-            sio.emit('output', 'Duration: ' + str(info_dict["duration"]))
+            sio.emit('output', 'Duration: ' + str(float(info_dict["duration"])/3600) + " hours")
             if int(info_dict["duration"]) > 5400:
                 sio.emit('output', 'You cannot download videos longer than 1.5 hours.')
                 return
@@ -51,7 +51,7 @@ def download_as_audio(link):
     with youtube_dl.YoutubeDL(ydl_audio_opts) as ydl:
         try:
             info_dict = ydl.extract_info(link, download=False)
-            sio.emit('output', 'Duration: ' + str(info_dict["duration"]))
+            sio.emit('output', 'Duration: ' + str(float(info_dict["duration"])/3600) + " hours")
             if int(info_dict["duration"]) > 5400:
                 sio.emit('output', 'You cannot download videos longer than 1.5 hours.')
                 return
