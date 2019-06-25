@@ -37,7 +37,7 @@ def download_as_video(link):
         try:
             info_dict = ydl.extract_info(link, download=False)
             sio.emit('output', 'Duration: ' + str(info_dict["duration"]))
-            if int(info_dict["duration"])/3600 > 5400:
+            if int(info_dict["duration"]) > 5400:
                 sio.emit('output', 'You cannot download videos longer than 1.5 hours.')
                 return
             info_dict = ydl.extract_info(link, download=True)
@@ -52,7 +52,7 @@ def download_as_audio(link):
         try:
             info_dict = ydl.extract_info(link, download=False)
             sio.emit('output', 'Duration: ' + str(info_dict["duration"]))
-            if int(info_dict["duration"])/3600 > 5400:
+            if int(info_dict["duration"]) > 5400:
                 sio.emit('output', 'You cannot download videos longer than 1.5 hours.')
                 return
             filename  = info_dict['title'] + '.'
