@@ -55,6 +55,7 @@ def download_as_audio(link):
             if int(info_dict["duration"]) > 5400:
                 sio.emit('output', 'You cannot download videos longer than 1.5 hours.')
                 return
+            info_dict = ydl.extract_info(link, download=True)
             filename  = info_dict['title'] + '.'
             if info_dict['ext'] != "mp3":
                 filename += "mp3"
@@ -88,6 +89,7 @@ def on_link(data):
 def on_delete_files(files):
     print("Deleting downloaded files.")
     for filename in files:
+        print(filename)
         if os.path.exists(os.path.join(CURR_DIR, 'downloads', filename)):
             os.remove(os.path.join(CURR_DIR, 'downloads', filename))
 
